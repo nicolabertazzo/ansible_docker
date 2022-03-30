@@ -8,3 +8,4 @@ ansible-lint
 flake8
 yamllint
 converge
+pytest-testinfra
