@@ -4,18 +4,23 @@
     name: parted
     state: present
 
-- name: create partition docker partition
+- name: create docker partition
   parted:
-    device: /dev/vdb
+    device: /dev/sdb
     number: 1
     flags: [ lvm ]
     state: present
     part_end: 100MB
 
+- name: Install pvs dependency
+  yum:
+    name: pvs
+    state: present
+
 - name: task for creating volume group
   lvg:
       vg: sample-vg
-      pvs: /dev/vdb1
+      pvs: /dev/sdb1
       pesize: 16
 
 - name: Install lvm2 dependency
