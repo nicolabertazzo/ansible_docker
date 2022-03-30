@@ -1,0 +1,50 @@
+---
+- name: Install parted dependency
+  yum:
+    name: parted
+    state: present
+
+- name: create partition docker partition
+  parted:
+    device: /dev/vdb
+    number: 1
+    flags: [ lvm ]
+    state: present
+    part_end: 100MB
+
+- name: task for creating volume group
+  lvg:
+      vg: sample-vg
+      pvs: /dev/vdb1
+      pesize: 16
+
+- name: Install lvm2 dependency
+  package:
+    name: lvm2
+    state: present
+
+- name: task for creating logical volume
+  lvol:
+      vg: sample-vg
+      lv:  sample-lv
+      size: 100m
+      force: yes
+- name: Create directory /var/lib/docker/ if does not exist
+  file:
+    path: /var/lib/docker/
+    state: directory
+    mode: '0755'
+
+- name: format the xfs filesystem
+  filesystem:
+    fstype: xfs
+    dev: /dev/sample-vg/sample-lv
+
+- name: mount the lv on /var/lib/docker/
+  mount:
+    path: /var/lib/docker/
+    src: /dev/sample-vg/sample-lv
+    fstype: xfs
+    state: mounted
+
+# https://www.redhat.com/sysadmin/automating-logical-volume-manager

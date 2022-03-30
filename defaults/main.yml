@@ -1,2 +1,5 @@
 ---
 # defaults file for ansible_docker
+docker_storage_path: /var/lib/docker/
+docker_storage_size: 100m
+

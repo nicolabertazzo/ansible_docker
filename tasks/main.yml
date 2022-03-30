@@ -1,2 +1,4 @@
 ---
 # tasks file for ansible_docker
+# - import_tasks: configure_partition.yml
+- import_tasks: configure_partition.yml
