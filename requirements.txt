@@ -1,0 +1,10 @@
+wheel
+molecule
+docker
+ansible
+paramiko
+molecule-docker
+ansible-lint
+flake8
+yamllint
+converge

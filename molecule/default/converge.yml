@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include kiratech.ansible_docker"
+      include_role:
+        name: "kiratech.ansible_docker"
