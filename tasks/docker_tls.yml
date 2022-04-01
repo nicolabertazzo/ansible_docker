@@ -48,8 +48,8 @@
 
 - name: reload systemd configuration
   command: /usr/bin/systemctl daemon-reload
-  when: docker_systemd_service_config.changed or not molecule_test
+  when: docker_systemd_service_config.changed
 
 - name: restart docker engine
   service: name=docker state=restarted
-  when: docker_systemd_service_config.changed or not docker_ca_pem_file.stat.exists or not molecule_test
+  when: (docker_systemd_service_config.changed or not docker_ca_pem_file.stat.exists)
