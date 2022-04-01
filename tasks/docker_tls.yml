@@ -1,0 +1,55 @@
+---
+#
+# TLS setup
+#
+
+# TLS configuration: http://tech.paulcz.net/2016/01/secure-docker-with-tls/
+# TLS configuration: https://hub.docker.com/r/paulczar/omgwtfssl/
+# https://github.com/elemental-lf/ansible-docker
+
+- name: create directory for Docker engine TLS configuration
+  file: name=/etc/docker/ssl owner=root mode=0755 state=directory recurse=yes
+
+- name: install TLS key, cert and ca
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/docker/ssl/{{ item|basename }}"
+    mode: 0600
+  with_items:
+  - "{{ docker_tls_key }}"
+  - "{{ docker_tls_cert }}"
+  - "{{ docker_tls_ca }}"
+  register: docker_install_creds
+
+- name: check for existing TLS configuration
+  stat: path=/etc/docker/ssl/ca.pem
+  register: docker_ca_pem_file
+
+- name: protect TLS files
+  file:
+    dest: "{{ item }}"
+    mode: 0400
+  with_items:
+  - /etc/docker/ssl/key.pem
+  - /etc/docker/ssl/cert.pem
+  - /etc/docker/ssl/ca.pem
+
+# See: https://docs.docker.com/engine/admin/systemd/
+- name: create directory for customer docker service configuration
+  file: name=/etc/systemd/system/docker.service.d owner=root mode=0755 state=directory
+
+- name: delete old custom service configuration
+  file: path=/etc/systemd/system/docker.service.d/10-ssl.conf state=absent
+  ignore_errors: True
+
+- name: create custom service configuration
+  template: src=templates/10-custom.conf.j2 dest=/etc/systemd/system/docker.service.d/10-custom.conf
+  register: docker_systemd_service_config
+
+- name: reload systemd configuration
+  command: /usr/bin/systemctl daemon-reload
+  when: docker_systemd_service_config.changed or not molecule_test
+
+- name: restart docker engine
+  service: name=docker state=restarted
+  when: docker_systemd_service_config.changed or not docker_ca_pem_file.stat.exists or not molecule_test

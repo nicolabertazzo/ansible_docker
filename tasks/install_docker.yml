@@ -1,13 +1,24 @@
 ---
-- name: Install systemd 
-  yum:
-    name: systemd
-    update_cache: yes
+- name: add docker repo for most recent docker builds
+  yum_repository:
+    name: docker
+    description: Docker Repository
+    baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+    gpgcheck: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
+    enabled: yes
+
+# This also automatically obsoletes and removes an old docker-python RPM if installed
+- name: ensure python-docker-py is installed
+  yum: 
+    name:
+      - "python-docker-py"
     state: latest
 
-- name: Install Docker and start service
-  include_role:
-    name: ericsysmin.docker.docker
-  vars:
-     docker_selinux_enabled: yes
-   
+- name: install docker engine
+  yum: 
+    name:
+      - "docker-ce-{{ docker_version }}"
+      - "docker-ce-cli-{{ docker_version }}"
+    state: present
+  register: yum_docker

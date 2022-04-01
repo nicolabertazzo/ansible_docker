@@ -1,3 +1,8 @@
 ---
 # defaults file for ansible_docker
 docker_version: 20.10.14-*.el7
+docker_tls_key: /home/bertazzo/Progetti/2022/kiratech/cert/server/key.pem
+docker_tls_cert: /home/bertazzo/Progetti/2022/kiratech/cert/server/cert.pem
+docker_tls_ca: /home/bertazzo/Progetti/2022/kiratech/cert/server/ca.pem
+docker_selinux_enabled: false
+molecule_test: true
