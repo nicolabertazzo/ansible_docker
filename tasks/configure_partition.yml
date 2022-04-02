@@ -1,6 +1,6 @@
 ---
 - name: Install parted dependency
-  yum:
+  ansible.builtin.yum:
     name: parted
     state: present
 
@@ -13,7 +13,7 @@
     part_end: 100MB
 
 - name: Create directory /var/lib/docker/ if does not exist
-  file:
+  ansible.builtin.file:
     path: /var/lib/docker/
     state: directory
     mode: '0755'
