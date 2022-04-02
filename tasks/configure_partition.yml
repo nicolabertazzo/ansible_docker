@@ -6,11 +6,11 @@
 
 - name: create docker partition
   parted:
-    device: /dev/sdb
+    device: "{{ docker_block_device }}"
     number: 1
     flags: [ lvm ]
     state: present
-    part_end: 100MB
+    part_end: "{{ docker_storage_size }}"
 
 - name: Create directory /var/lib/docker/ if does not exist
   ansible.builtin.file:
@@ -21,12 +21,12 @@
 - name: format the xfs filesystem
   filesystem:
     fstype: ext2
-    dev: /dev/sdb1
+    dev: "{{ docker_block_device }}1"
 
 - name: mount the lv on /var/lib/docker/
   mount:
     path: /var/lib/docker/
-    src: /dev/sdb1
+    src: "{{ docker_block_device }}1"
     fstype: ext2
     state: mounted
 
