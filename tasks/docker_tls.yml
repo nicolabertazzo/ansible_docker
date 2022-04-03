@@ -40,18 +40,13 @@
 
 - name: delete old custom service configuration
   ansible.builtin.file: path=/etc/systemd/system/docker.service.d/10-ssl.conf state=absent
-  ignore_errors: True
+  # ignore_errors: True
 
 - name: create custom service configuration
-  ansible.builtin.template: src=templates/10-custom.conf.j2 dest=/etc/systemd/system/docker.service.d/10-custom.conf
-  register: docker_systemd_service_config
-
-- name: reload systemd configuration
-  ansible.builtin.systemd:
-    state: restarted
-    name: docker
-  when: docker_systemd_service_config.changed
-
-- name: restart docker engine
-  ansible.builtin.service: name=docker state=restarted
-  when: (docker_systemd_service_config.changed or not docker_ca_pem_file.stat.exists)
+  ansible.builtin.template:
+    src: templates/10-custom.conf.j2
+    dest: /etc/systemd/system/docker.service.d/10-custom.conf
+    mode: 0644
+  notify: 
+    - reload systemd configuration
+    - restart docker engine
