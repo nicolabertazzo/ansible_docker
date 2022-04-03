@@ -1,6 +1,6 @@
 ---
 - name: add docker repo for most recent docker builds
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: docker
     description: Docker Repository
     baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
@@ -10,13 +10,13 @@
 
 # This also automatically obsoletes and removes an old docker-python RPM if installed
 - name: ensure python-docker-py is installed
-  yum: 
+  ansible.builtin.yum: 
     name:
       - "python-docker-py"
-    state: latest
+    state: present
 
 - name: install docker engine
-  yum: 
+  ansible.builtin.yum: 
     name:
       - "docker-ce-{{ docker_version }}"
       - "docker-ce-cli-{{ docker_version }}"
