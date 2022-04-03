@@ -9,4 +9,4 @@ yamllint
 converge
 pytest-testinfra
 molecule[lint]
-molecule[docker]
+molecule-vagrant
