@@ -1,6 +1,6 @@
 galaxy_info:
   author: Nicola Bertazzo
-  namespace: nicolabertazzo
+  namespace: kiratech
   description: Ansible role that installs Docker and Docker Swarm
   platforms:
     - name: EL

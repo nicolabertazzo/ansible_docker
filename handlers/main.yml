@@ -3,6 +3,6 @@
 - name: reload systemd configuration
   ansible.builtin.systemd:
     state: restarted
-    name: docke
+    name: docker
 - name: restart docker engine
   ansible.builtin.service: name=docker state=restarted
