@@ -2,12 +2,35 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: vagrant
+  provider:
+    name: virtualbox
 platforms:
   - name: instance
-    image: quay.io/centos/centos:7
-    pre_build_image: true
+    box: centos/7
     privileged: true
+    memory: 4096
+    cpus: 2
+    interfaces:
+      # `network_name` is the required identifier, other keys map to arguments.
+      - network_name: private_network
+        ip: 192.168.56.10
+#    config_options:
+#      ssh.keep_alive: yes
+#      ssh.remote_user: "'vagrant'"
+    # configure second partition
+    provider_raw_config_args:
+    - "customize
+       ['createhd',
+        '--filename', 'extradisk_centos_7.vdi',
+        '--size', 1024]"
+    - "customize
+       ['storageattach', :id,
+        '--storagectl', 'IDE',
+        '--port', 1,
+        '--device', 1,
+        '--type', 'hdd',
+        '--medium', 'extradisk_centos_7.vdi']"
 provisioner:
   name: ansible
 lint: |
@@ -16,5 +39,12 @@ lint: |
   ansible-lint .
 scenario:
   name: default
+  test_sequence:
+  - destroy
+  - create
+  - converge
+  # - idempotence
+  - lint
+  - verify
 verifier:
   name: testinfra
