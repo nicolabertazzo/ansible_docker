@@ -1,0 +1,6 @@
+---
+
+- name: enabled docker service
+  ansible.builtin.service: 
+    name: docker
+    enabled: yes
