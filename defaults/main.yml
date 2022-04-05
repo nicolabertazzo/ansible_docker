@@ -6,3 +6,5 @@ docker_version: 20.10.14-*.el7
 docker_tls_key: /home/bertazzo/Progetti/2022/kiratech/prova/cert/key.pem
 docker_tls_cert: /home/bertazzo/Progetti/2022/kiratech/prova/cert/cert.pem
 docker_tls_ca: /home/bertazzo/Progetti/2022/kiratech/prova/cert/ca.pem
+docker_advertise_addr: 192.168.56.10
+docker_remote_addrs: '192.168.56.10:2377'

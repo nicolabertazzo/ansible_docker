@@ -1,5 +1,5 @@
 ---
-- name: add docker repo for most recent docker builds
+- name: Add docker repo for most recent docker builds
   ansible.builtin.yum_repository:
     name: docker
     description: Docker Repository
@@ -9,16 +9,15 @@
     enabled: yes
 
 # This also automatically obsoletes and removes an old docker-python RPM if installed
-- name: ensure python-docker-py is installed
+- name: Ensure python-docker-py is installed
   ansible.builtin.yum: 
     name:
       - "python-docker-py"
     state: present
 
-- name: install docker engine
+- name: Install docker engine
   ansible.builtin.yum: 
     name:
       - "docker-ce-{{ docker_version }}"
       - "docker-ce-cli-{{ docker_version }}"
     state: present
-  register: yum_docker
