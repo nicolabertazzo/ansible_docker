@@ -3,3 +3,4 @@
 - import_tasks: configure_partition.yml
 - import_tasks: install_docker.yml
 - import_tasks: docker_tls.yml
+- import_tasks: docker_enabled.yml
