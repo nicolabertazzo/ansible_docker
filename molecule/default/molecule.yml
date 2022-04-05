@@ -15,10 +15,6 @@ platforms:
       # `network_name` is the required identifier, other keys map to arguments.
       - network_name: private_network
         ip: 192.168.56.10
-#    config_options:
-#      ssh.keep_alive: yes
-#      ssh.remote_user: "'vagrant'"
-    # configure second partition
     provider_raw_config_args:
     - "customize
        ['createhd',
@@ -40,11 +36,17 @@ lint: |
 scenario:
   name: default
   test_sequence:
+  - lint
+  - cleanup
   - destroy
   - create
+  - prepare
   - converge
   # - idempotence
-  - lint
   - verify
+  - cleanup
+  - destroy
 verifier:
   name: testinfra
+  options:
+    sudo: true
