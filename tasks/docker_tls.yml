@@ -7,10 +7,10 @@
 # TLS configuration: https://hub.docker.com/r/paulczar/omgwtfssl/
 # https://github.com/elemental-lf/ansible-docker
 
-- name: create directory for Docker engine TLS configuration
+- name: Create directory for Docker engine TLS configuration
   ansible.builtin.file: name=/etc/docker/ssl owner=root mode=0755 state=directory recurse=yes
 
-- name: install TLS key, cert and ca
+- name: Install TLS key, cert and ca
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "/etc/docker/ssl/{{ item|basename }}"
@@ -19,13 +19,8 @@
   - "{{ docker_tls_key }}"
   - "{{ docker_tls_cert }}"
   - "{{ docker_tls_ca }}"
-  register: docker_install_creds
 
-- name: check for existing TLS configuration
-  ansible.builtin.stat: path=/etc/docker/ssl/ca.pem
-  register: docker_ca_pem_file
-
-- name: protect TLS files
+- name: Protect TLS files
   ansible.builtin.file:
     dest: "{{ item }}"
     mode: 0400
@@ -35,14 +30,13 @@
   - /etc/docker/ssl/ca.pem
 
 # See: https://docs.docker.com/engine/admin/systemd/
-- name: create directory for customer docker service configuration
+- name: Create directory for customer docker service configuration
   ansible.builtin.file: name=/etc/systemd/system/docker.service.d owner=root mode=0755 state=directory
 
-- name: delete old custom service configuration
+- name: Delete old custom service configuration
   ansible.builtin.file: path=/etc/systemd/system/docker.service.d/10-ssl.conf state=absent
-  # ignore_errors: True
 
-- name: create custom service configuration
+- name: Create custom service configuration
   ansible.builtin.template:
     src: templates/10-custom.conf.j2
     dest: /etc/systemd/system/docker.service.d/10-custom.conf

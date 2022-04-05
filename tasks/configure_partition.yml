@@ -4,7 +4,7 @@
     name: parted
     state: present
 
-- name: create docker partition
+- name: Create docker partition
   parted:
     device: "{{ docker_block_device }}"
     number: 1
@@ -18,12 +18,12 @@
     state: directory
     mode: '0755'
 
-- name: format the xfs filesystem
+- name: Format the filesystem
   filesystem:
     fstype: ext2
     dev: "{{ docker_block_device }}1"
 
-- name: mount the lv on /var/lib/docker/
+- name: Mount the partition on /var/lib/docker/
   mount:
     path: /var/lib/docker/
     src: "{{ docker_block_device }}1"

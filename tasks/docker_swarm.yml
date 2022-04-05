@@ -1,0 +1,27 @@
+---
+#
+# Docker swarm setup
+#
+
+- name: Init a new swarm with default parameters
+  docker_swarm:
+    state: present
+    advertise_addr: "{{ docker_advertise_addr }}"
+  register: swarm_info
+  when: not docker_swarm_manager is defined and not docker_swarm_worker is defined
+
+- name: Add Manager
+  docker_swarm:
+    state: join
+    advertise_addr: "{{ docker_advertise_addr }}"
+    join_token: "{{ docker_swarm_manager_token }}"
+    remote_addrs: [ "{{ docker_remote_addrs }}" ]
+  when: docker_swarm_manager is defined
+
+- name: Add Worker
+  docker_swarm:
+    state: join
+    advertise_addr: "{{ docker_advertise_addr }}"
+    join_token: "{{ docker_swarm_worker_token }}"
+    remote_addrs: [ "{{ docker_remote_addrs }}" ]
+  when: docker_swarm_worker is defined

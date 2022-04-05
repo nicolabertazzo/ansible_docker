@@ -1,38 +1,45 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role provides the following:
+
+- Define a partition for Docker installation
+- Installation of Docker following Docker-Engine install procedures as documented by Docker.
+- Configure Docker HTTPS/TLS
+- Configure Docker Swarm
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role requires Ansible 2.12 or higher.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+| Variable                   | Required | Default        | Comments                                                     |
+| -------------------------- | -------- | -------------- | ------------------------------------------------------------ |
+| docker_block_device        | yes      | /dev/sdb       |                                                              |
+| docker_storage_size        | yes      | 100MB          |                                                              |
+| docker_version             | yes      | 20.10.14-*.el7 |                                                              |
+| docker_tls_key             | yes      | None           | path to key.pem file. The file must be named as key.pem      |
+| docker_tls_cert            | yes      | None           | path to cert.pem file. The file must be named as cert.pem    |
+| docker_tls_ca              | yes      | None           | path to ca.pem file. The file must be named as ca.pem        |
+| docker_advertise_addr      | yes      | None           | docker swarm advertise addres. https://docs.docker.com/engine/reference/commandline/swarm_init/#--advertise-addr |
+| docker_remote_addrs        | No       | None           | HOST:PORT  to docker swarm                                   |
+| docker_swarm_manager       | No       |                | define if the node is a manager                              |
+| docker_swarm_manager_token | No       |                | Required token to join a node as manager                     |
+| docker_swarm_worker        | No       |                | define if the node is a worker                               |
+| docker_swarm_worker_token  | No       |                | Required token to join a node as worker                      |
 
-Dependencies
-------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
 
 License
 -------
 
-BSD
+Apache-2.0
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+[Nicola Bertazzo](https://github.com/nicolabertazzo)
+
