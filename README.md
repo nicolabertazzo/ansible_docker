@@ -4,7 +4,7 @@ Role Name
 This role provides the following:
 
 - Define a partition for Docker installation
-- Installation of Docker following Docker-Engine install procedures as documented by Docker.
+- Installation of Docker following Docker-Engine install procedures as documented by Docker
 - Configure Docker HTTPS/TLS
 - Configure Docker Swarm
 
